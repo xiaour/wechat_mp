@@ -1,0 +1,31 @@
+#服务启动端口
+server :  
+  port : 7711
+  sessionTimeout : 30
+  contextPath: /wechat_mp
+  #微信下单时给让微信回掉的处理接口
+  payNotify: ~
+  #支付成功后通知处理，可以设置为其他项目处理支付的URL。
+  payCallbackUrl: ~
+  #二维码存放目录
+  QRCodePath: ~
+  #微信支付证书、其他配置文件存放目录
+  wxConfigStoragePath: ~
+
+#数据库配置
+spring:
+      redis:
+      host: 127.0.0.1
+      password: ~
+      port: 6379
+      pool:
+        max-active: 100
+        max-idle: 10
+        max-wait: 100000
+
+# 日志输出
+logging: 
+    file: D:/wechat_mp.log
+    level:
+        root: INFO
+

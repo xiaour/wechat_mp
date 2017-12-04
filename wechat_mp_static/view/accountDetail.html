@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+  
+ <head>
+    <meta charset="utf-8">
+    <title>Wechat MP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/pages/reports.css" rel="stylesheet">
+  </head>
+
+<body>
+<div class="navbar navbar-fixed-top" id="menuTree">
+
+</div>
+
+
+    
+<div class="subnavbar">
+
+</div> <!-- /subnavbar -->
+    
+
+    
+<div class="main" id="vue">
+	
+	<div class="main-inner">
+
+	    <div class="container">
+
+
+
+			<div class="widget ">
+				<div class="widget-header">
+					<h3>查看公众号信息</h3>
+				</div> <!-- /widget-header -->
+
+				<div class="widget-content">
+				<fieldset>
+					<br />
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" >公众号名称：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.name" readonly placeholder="开发者ID（AppID）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >开发者ID：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.id" readonly placeholder="开发者ID（AppID）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >开发者密码：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.secret" readonly placeholder="开发者密码（AppSecret）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >令 牌：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.token" readonly placeholder="令 牌（Token）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >消息加解密密钥：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.aeskey" readonly placeholder="消息加解密密钥">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >支付商户号：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.mchId" readonly placeholder="支付商户号">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >支付商户key：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.mchSignKey" readonly placeholder="支付商户key">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >Accesstoken：</label>
+
+
+						<div class="controls">
+							<input type="button" class="btn btn-success" value="从缓存拉取AccessToken" v-on:click="getAccessToken()" placeholder="支付商户key">
+							<br/><br/>
+							<textarea class="span6" rows="5" v-model="accessToken">
+
+							</textarea>
+						</div>
+					</div>
+
+				</form>
+
+				</fieldset>
+
+					<br /><br />
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+
+
+	</div> <!-- /main-inner -->
+    
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/excanvas.min.js"></script>
+<script src="js/chart.min.js" type="text/javascript"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/base.js"></script>
+<script src="js/init.header.menu.js"></script>
+
+<script>
+
+
+    var app=new Vue({
+    el: '#vue',
+    data: {
+        accessToken:"",
+        account:{},
+        updateAppid:{}
+	},
+    mounted: function () {
+		var that= this;
+        that.updateAppid=decodeURI(getQueryParam("id"));
+        if(that.updateAppid){
+			$.ajax({
+				type:"GET",
+				url:"/wechat_mp/wechat/getAccount",
+				data:{appid:that.updateAppid},
+				dataType:"json",
+				success: function(result) {
+					if(result.code==200) {
+						that.account=result.data;
+					}
+				}
+			});
+        }
+    },
+        methods:{
+        	getAccessToken: function() {
+
+				var that=this;
+				$.ajax({
+					type:"POST",
+					url:"/wechat_mp/wechat/getAccessToken",
+					data:{appid:that.updateAppid},
+					dataType:"json",
+					success: function(result) {
+						if(result.code==200) {
+							that.accessToken=result.data;
+						}else{
+							alert(result.message);
+						}
+					},
+					error:function (result) {
+						alert("参数错误！");
+					}
+				})
+        }
+    }
+
+});
+</script>
+
+
+  </body>
+
+</html>

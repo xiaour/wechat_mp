@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+  
+ <head>
+    <meta charset="utf-8">
+    <title>Wechat MP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/pages/reports.css" rel="stylesheet">
+  </head>
+
+<body>
+<div class="navbar navbar-fixed-top" id="menuTree">
+
+</div>
+
+
+    
+<div class="subnavbar">
+
+</div> <!-- /subnavbar -->
+    
+
+    
+<div class="main" id="vue">
+	
+	<div class="main-inner">
+
+	    <div class="container">
+
+
+
+			<div class="widget ">
+				<div class="widget-header">
+					<h3>维护公众号信息</h3>
+				</div> <!-- /widget-header -->
+
+				<div class="widget-content">
+				<fieldset>
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" >公众号名称：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.name" placeholder="公众号名称">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >开发者ID：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.id" :disabled="input.appid ==true" placeholder="开发者ID（AppID）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >开发者密码：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.secret" placeholder="开发者密码（AppSecret）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >令 牌：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.token" placeholder="令 牌（Token）">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >消息加解密密钥：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.aeskey" placeholder="消息加解密密钥">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >支付商户号：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.mchId" placeholder="支付商户号">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" >支付商户key：</label>
+						<div class="controls">
+							<input type="text" class="span6 disabled" v-model="account.mchSignKey" placeholder="支付商户key">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-4 control-label">上传支付证书：</label>
+						<div class="controls">
+
+							<a class="btn" @click="">上传文件</a>
+							<!--<my-upload url="/upload"
+									   lang-type="en"
+									   field="img"
+									   key="1"
+									   max-size="500"
+									   :only-single="true"
+									   :value="true"
+									   :only-img="true"
+									   :params=""></my-upload>-->
+						</div>
+					</div>
+
+				</form>
+
+				</fieldset>
+					<br />
+					<div class="span8 pull-right">
+						<input type="submit" class="btn btn-large btn-success" v-on:click="submitInfo" value="提交"/>
+						<input type="button" class="btn btn-large" value="取消"/>
+					</div>
+					<br /><br /><br />
+
+				</div>
+
+				<div class="control-group">
+					<div class="controls">
+
+						<div class="accordion" id="accordion2">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+										1.微信公众平台设置
+									</a>
+								</div>
+								<div id="collapseOne" class="accordion-body collapse in">
+									<div class="accordion-inner">
+
+										操作提示1...
+									</div>
+								</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+										2.公众号信息初始化
+									</a>
+								</div>
+								<div id="collapseTwo" class="accordion-body collapse">
+									<div class="accordion-inner">
+										操作提示2...
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+
+
+			</div>
+
+		</div>
+
+
+
+	</div> <!-- /main-inner -->
+    
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/excanvas.min.js"></script>
+<script src="js/chart.min.js" type="text/javascript"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/base.js"></script>
+<script src="js/init.header.menu.js"></script>
+
+<script>
+
+
+    var app=new Vue({
+    el: '#vue',
+    data: {
+        input:{appid:false},
+        account:{},
+        updateAppid:{}
+	},
+    mounted: function () {
+		var that= this;
+        that.updateAppid=decodeURI(getQueryParam("id"));
+        console.log(that.updateAppid);
+        if(that.updateAppid){
+			$.ajax({
+				type:"GET",
+				url:"/wechat_mp/wechat/getAccount",
+				data:{appid:that.updateAppid},
+				dataType:"json",
+				success: function(result) {
+					if(result.code==200) {
+						that.input.appid=true;
+						that.account=result.data;
+					}
+				}
+			});
+        }
+    },
+        methods:{
+        submitInfo: function(event) {
+            $.ajax({
+                type:"POST",
+                url:"/wechat_mp/wechat/add",
+                data:this.account,
+                dataType:"json",
+                success: function(result) {
+                    if(result.code==200) {
+                        window.location.reload();
+                    }else{
+                        alert(result.message);
+					}
+                },
+				error:function (result) {
+                    alert("参数错误！");
+                }
+            })
+        }
+    }
+
+});
+</script>
+
+
+  </body>
+
+</html>
